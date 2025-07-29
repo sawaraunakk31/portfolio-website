@@ -2,12 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Smooth scroll behavior for the entire site */
+/* Smooth scroll behavior */
 html {
   scroll-behavior: smooth;
 }
 
-/* Hide default scrollbar and use custom one */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -19,15 +19,27 @@ html {
   border-radius: 10px;
 }
 
-/* Optional custom transitions and font smoothing */
+/* Base Body Styles */
 body {
   @apply bg-black text-white antialiased font-orbitron;
-
+  background-color: #000;
 }
 
-/* Animations */
+/* ===== Loader Animations ===== */
+
 .fade-in-up {
   animation: fadeInUp 0.6s ease-out forwards;
+}
+.fade-in {
+  animation: fadeIn 1s ease-out forwards;
+}
+.blinking-cursor {
+  display: inline-block;
+  width: 8px;
+  height: 1em;
+  background-color: #00ff88;
+  margin-left: 4px;
+  animation: blink 1s step-start infinite;
 }
 @keyframes fadeInUp {
   0% {
@@ -39,32 +51,154 @@ body {
     transform: translateY(0);
   }
 }
-
-.fade-in {
-  animation: fadeIn 1s ease-out forwards;
-}
 @keyframes fadeIn {
-  0% {
+  from {
     opacity: 0;
   }
-  100% {
+  to {
     opacity: 1;
   }
 }
-@keyframes glow {
+
+/* Typing effect */
+.typing::after {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 1em;
+  background-color: #00ff88;
+  margin-left: 4px;
+  animation: blink 1s step-start infinite;
+}
+
+.typing-welcome {
+  border-right: 2px solid #00ff88;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 0;
+  animation: typeOut 2s steps(40, end) forwards, blink 1s step-end infinite;
+  margin-top: 1rem;
+  color: #00ff88;
+}
+.typing-cursor {
+  display: inline-block;
+  color: #00ff88;
+  margin-left: 4px;
+  animation: blink 1s steps(1) infinite;
+}
+/* Cursor blinking */
+@keyframes blink {
   0%, 100% {
-    box-shadow: 0 0 15px #d946ef, 0 0 30px #ec4899;
+    opacity: 1;
   }
   50% {
-    box-shadow: 0 0 25px #d946ef, 0 0 40px #ec4899;
+    border-color: transparent;
+    opacity: 0;
+  }
+}
+.glitch-exit {
+  animation: glitchFade 0.9s ease-out forwards;
+}
+/* Glitch text */
+.glitch-text {
+  animation: glitch 1.5s infinite;
+}
+@keyframes glitch {
+  0%, 100% {
+    text-shadow: none;
+  }
+  20% {
+    text-shadow: 2px 0 red, -2px 0 cyan;
+  }
+  40% {
+    text-shadow: -2px 0 red, 2px 0 cyan;
+  }
+  60% {
+    text-shadow: 1px 0 red, -1px 0 cyan;
+  }
+  80% {
+    text-shadow: -1px 0 red, 1px 0 cyan;
+  }
+}
+@keyframes matrixFallDown {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+@keyframes matrixFallUp {
+  0% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(-100vh);
   }
 }
 
-.animate-glow {
-  animation: glow 2s infinite ease-in-out;
+.animate-matrixFallDown {
+  animation: matrixFallDown 4s linear infinite;
+}
+.animate-matrixFallUp {
+  animation: matrixFallUp 4s linear infinite;
+}
+.typing-cursor::after {
+  content: '|';
+  animation: blink 1s steps(1) infinite;
+}
+/* Glow Bar */
+.glow-bar {
+  box-shadow: 0 0 8px #00ff88, 0 0 16px #00ff88, 0 0 32px #00ff88;
 }
 
-/* Optional Glassmorphism class (can be used in any component) */
-.glass {
-  @apply bg-white/10 backdrop-blur-md border border-white/10 rounded-xl shadow-lg;
+/* Text fill animation */
+@keyframes text-fill {
+  0% {
+    background-size: 0% 100%;
+  }
+  100% {
+    background-size: 100% 100%;
+  }
+}
+
+/* Matrix-style background */
+.matrix-bg {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 255, 0, 0.08) 0px,
+    rgba(0, 255, 0, 0.08) 2px,
+    transparent 2px,
+    transparent 6px
+  );
+  animation: scrollMatrix 6s linear infinite;
+}
+@keyframes scrollMatrix {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 0 100%;
+  }
+}
+
+/* Red error terminal lines */
+.error-line {
+  color: #ff3b3b;
+  font-family: monospace;
+  font-size: 0.85rem;
+  margin-top: 0.2rem;
+  display: block;
+}
+
+/* Typewriter keyframe */
+@keyframes typeOut {
+  to {
+    width: 100%;
+  }
+}
+
+/* Sound Toggle Button */
+.sound-toggle {
+  @apply absolute top-4 right-4 text-xs text-green-300 bg-green-900/20 px-2 py-1 rounded border border-green-600 hover:bg-green-800/40 cursor-pointer transition-all;
 }

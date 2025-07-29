@@ -20,6 +20,7 @@ module.exports = {
       animation: {
         blob: "blob 7s infinite",
         wiggle: "wiggle 1s ease-in-out infinite",
+        'spin-fast': 'spin 1.2s linear infinite',
         fade: "fadeIn 3s ease-in-out",
         'slide-in': 'slideIn 0.5s ease-out',
       },
