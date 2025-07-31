@@ -12,7 +12,7 @@ const projects = [
     title: 'FuturePreneurs',
     image: futurepreneursImg,
     description: 'Registration & quiz platform for 2200+ students. Built for a university-level business simulation competition.',
-    tools: ['Next.js', 'MongoDB', 'Node.js','Tailwind CSS'],
+    tools: ['Next.js', 'MongoDB', 'Node.js', 'Tailwind CSS'],
     link: 'https://future-preneurs-24-eta.vercel.app/',
     github: 'https://github.com/sawaraunakk31/FuturePreneurs-24',
   },
@@ -71,15 +71,15 @@ const Projects = () => {
               </p>
               <div className="mt-4 flex items-center justify-between">
                 {project.link && (
-    <a
-      href={project.link}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-sm text-cyan-400 hover:underline"
-    >
-      Live Site ↗
-    </a>
-  )}
+                  <a
+                    href={project.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-cyan-400 hover:underline"
+                  >
+                    Live Site ↗
+                  </a>
+                )}
                 <a
                   href={project.github}
                   target="_blank"
