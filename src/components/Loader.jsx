@@ -51,7 +51,7 @@ const Loader = ({ onFinish }) => {
               ((currentLineIndex + currentCharIndex / currentLine.length) / fakeLogs.length) * 100
             )
           );
-        }, 35);
+        }, 5);
         return () => clearTimeout(timeout);
       } else {
         setCurrentLineIndex((prev) => prev + 1);
@@ -61,7 +61,7 @@ const Loader = ({ onFinish }) => {
       setTimeout(() => {
         if (audioRef.current) audioRef.current.pause();
         onFinish?.();
-      }, 1200);
+      }, 300);
     }
   }, [currentCharIndex, currentLineIndex]);
 
@@ -107,7 +107,7 @@ const Loader = ({ onFinish }) => {
         {typedLogs.map((line, i) => (
           <div key={i} className="text-green-400">
             {line}
-            {i === currentLineIndex && <span className="typing-cursor">|</span>}
+            {i === currentLineIndex && <span className="typing-cursor">▌</span>}
           </div>
         ))}
       </div>

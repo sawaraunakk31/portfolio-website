@@ -7,6 +7,7 @@ import Skills from './components/Skills';
 import Projects from './components/Projects';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import ScrollToTop from './components/ScrollToTop';
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -16,26 +17,35 @@ const App = () => {
       {isLoading ? (
         <Loader onFinish={() => setIsLoading(false)} />
       ) : (
-        <div className="bg-black text-white font-space-grotesk scroll-smooth">
+        <div className="bg-black text-white font-space-grotesk h-screen flex flex-col">
           <Navbar />
-          <main className="snap-y snap-mandatory overflow-y-scroll h-screen scrollbar-thin scrollbar-thumb-cyan-500 scrollbar-track-transparent">
-            <section id="hero" className="snap-start">
-              <Hero />
-            </section>
-            <section id="about" className="snap-center">
-              <About />
-            </section>
-            <section id="skills" className="snap-center">
-              <Skills />
-            </section>
-            <section id="projects" className="snap-center">
-              <Projects />
-            </section>
-            <section id="contact" className="snap-end">
-              <Contact />
-            </section>
-            <Footer />
-          </main>
+
+          {/* Scrollable snapping content */}
+          <div className="flex-1 overflow-y-auto scroll-smooth snap-y snap-mandatory scrollbar-thin scrollbar-thumb-cyan-500 scrollbar-track-transparent">
+            <main>
+              <section id="hero" className="snap-start h-screen">
+                <Hero />
+              </section>
+              <section id="about" className="snap-center h-screen">
+                <About />
+              </section>
+              <section id="skills" className="snap-center h-screen">
+                <Skills />
+              </section>
+              <section id="projects" className="snap-center min-h-screen">
+                <Projects />
+              </section>
+              <section id="contact" className="snap-start">
+                <Contact />
+              </section>
+              <section id="footer" className="snap-end">
+                <Footer />
+              </section>
+            </main>
+          </div>
+
+          {/* Scroll to top button */}
+          <ScrollToTop />
         </div>
       )}
     </>

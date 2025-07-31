@@ -29,7 +29,7 @@ const Contact = () => {
   return (
     <section
       id="contact"
-      className="relative z-10 px-6 sm:px-10 py-24 bg-gradient-to-br from-[#141e30] via-[#243b55] to-[#141e30] text-white font-space-grotesk"
+      className="relative z-10 px-6 sm:px-10 py-16 bg-gradient-to-br from-[#141e30] via-[#243b55] to-[#141e30] text-white font-space-grotesk"
     >
       <div className="max-w-4xl mx-auto text-center mb-16">
         <motion.h2
@@ -77,7 +77,7 @@ const Contact = () => {
           <label className="block text-sm text-gray-300 mb-1">Your Message</label>
           <textarea
             name="message"
-            rows="5"
+            rows="4"
             required
             className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-pink-500 text-white"
           ></textarea>

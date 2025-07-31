@@ -11,6 +11,12 @@ module.exports = {
         unbounded: ['"Unbounded"', "cursive"],
         orbitron: ['"Orbitron"', "sans-serif"],
       },
+      scrollSnapType: {
+        x: 'x mandatory',
+      },
+      scrollSnapAlign: {
+        start: 'start',
+      },
       colors: {
         primary: "#0ff",
         neonBlue: "#38bdf8",
@@ -24,6 +30,7 @@ module.exports = {
         fade: "fadeIn 3s ease-in-out",
         'slide-in': 'slideIn 0.5s ease-out',
       },
+
       keyframes: {
         blob: {
           "0%": { transform: "translate(0px, 0px) scale(1)" },
@@ -59,6 +66,7 @@ module.exports = {
     },
   },
   plugins: [
+    require('tailwind-scrollbar-hide'),
     require("@tailwindcss/forms"),
     require("@tailwindcss/typography"),
     require("@tailwindcss/aspect-ratio"),

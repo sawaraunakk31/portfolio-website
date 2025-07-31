@@ -41,6 +41,25 @@ body {
   margin-left: 4px;
   animation: blink 1s step-start infinite;
 }
+.blinking-cursor-hero {
+  font-weight: bold;
+  animation: blink 1s step-start infinite;
+}
+@keyframes spin-slow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.animate-spin-slow {
+  animation: spin-slow 6s linear infinite;
+}
+/* Hide scrollbar */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
 @keyframes fadeInUp {
   0% {
     opacity: 0;
@@ -143,10 +162,7 @@ body {
 .animate-matrixFallUp {
   animation: matrixFallUp 4s linear infinite;
 }
-.typing-cursor::after {
-  content: '|';
-  animation: blink 1s steps(1) infinite;
-}
+
 /* Glow Bar */
 .glow-bar {
   box-shadow: 0 0 8px #00ff88, 0 0 16px #00ff88, 0 0 32px #00ff88;
