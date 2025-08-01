@@ -61,7 +61,7 @@ const Loader = ({ onFinish }) => {
       setTimeout(() => {
         if (audioRef.current) audioRef.current.pause();
         onFinish?.();
-      }, 300);
+      }, 500);
     }
   }, [currentCharIndex, currentLineIndex]);
 
