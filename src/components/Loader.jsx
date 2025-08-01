@@ -51,7 +51,7 @@ const Loader = ({ onFinish }) => {
               ((currentLineIndex + currentCharIndex / currentLine.length) / fakeLogs.length) * 100
             )
           );
-        }, 5);
+        }, 60);
         return () => clearTimeout(timeout);
       } else {
         setCurrentLineIndex((prev) => prev + 1);
