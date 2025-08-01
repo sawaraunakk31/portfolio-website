@@ -23,7 +23,7 @@ const App = () => {
           <Navbar />
 
           {/* Scrollable snapping content */}
-          <div className="flex-1 overflow-y-auto scroll-smooth snap-y snap-mandatory scrollbar-thin scrollbar-thumb-cyan-500 scrollbar-track-transparent">
+          <div className="flex-1 overflow-y-auto scroll-smooth md:snap-y md:snap-mandatory scrollbar-thin scrollbar-thumb-cyan-500 scrollbar-track-transparent">
             <Toaster
               position="top-right"
               toastOptions={{
