@@ -54,12 +54,13 @@ const App = () => {
               <section id="hero" className="snap-start h-screen">
                 <Hero />
               </section>
-              <section id="about" className="snap-center h-screen">
+              <section id="about" className="snap-center min-h-screen md:h-screen">
                 <About />
               </section>
-              <section id="skills" className="snap-center h-screen">
+              <section id="skills" className="snap-center min-h-screen md:h-screen">
                 <Skills />
               </section>
+
               <section id="projects" className="snap-center min-h-screen">
                 <Projects />
               </section>
