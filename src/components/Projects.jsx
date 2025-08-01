@@ -43,9 +43,23 @@ const projects = [
 const Projects = () => {
   return (
     <div className="min-h-screen px-4 py-20 flex flex-col items-center justify-center bg-black relative overflow-hidden">
-      {/* Blobs Background */}
-      <div className="absolute top-[-100px] left-[-100px] w-[300px] h-[300px] bg-cyan-500 opacity-30 rounded-full blur-3xl animate-pulse"></div>
-      <div className="absolute bottom-[-120px] right-[-100px] w-[300px] h-[300px] bg-purple-600 opacity-30 rounded-full blur-3xl animate-pulse"></div>
+      {/* Glowing Background Dots */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="w-full h-full bg-[radial-gradient(circle_at_10%_10%,rgba(255,0,255,0.1)_0%,transparent_40%),radial-gradient(circle_at_80%_50%,rgba(0,255,255,0.1)_0%,transparent_40%)] animate-pulse" />
+      </div>
+
+      {/* Single Subtle Interactive Blob */}
+      <motion.div
+        className="absolute w-[32rem] h-[32rem] bg-gradient-to-br from-[#1e1e1e] via-[#2a2a2a] to-[#121212] rounded-full opacity-20 blur-[100px] mix-blend-lighten pointer-events-none"
+        style={{ top: '10%', left: '25%' }}
+        animate={{ x: [0, 30, -20, 0], y: [0, 40, -30, 0] }}
+        transition={{ repeat: Infinity, duration: 18, ease: "easeInOut" }}
+        whileHover={{
+          scale: 1.1,
+          opacity: 0.3,
+          transition: { duration: 0.8, ease: "easeInOut" }
+        }}
+      />
       <h2 className="text-4xl md:text-5xl font-bold mb-16 text-cyan-400 text-center">My Projects</h2>
 
       <div className="w-full flex flex-wrap justify-center gap-6 px-2 md:px-10 xl:gap-8">

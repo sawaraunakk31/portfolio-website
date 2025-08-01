@@ -18,7 +18,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-[#0a0a0a] text-gray-400 px-6 py-8 border-t border-white/10 font-space-grotesk sticky bottom-0 z-50">
+    <footer className="backdrop-blur-md bg-black/50 shadow-md text-gray-400 px-6 py-8 border-t border-white/10 font-space-grotesk sticky bottom-0 z-50">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

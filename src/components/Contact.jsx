@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import emailjs from '@emailjs/browser';
 import { FaPaperPlane } from 'react-icons/fa';
+import toast, { Toaster } from 'react-hot-toast';
 
 const Contact = () => {
   const formRef = useRef();
@@ -11,26 +12,48 @@ const Contact = () => {
     e.preventDefault();
 
     emailjs.sendForm(
-      'your_service_id',     // replace with your EmailJS service ID
-      'your_template_id',    // replace with your EmailJS template ID
+      'service_zsy5lsg',     // replace with your EmailJS service ID
+      'template_zesviwi',    // replace with your EmailJS template ID
       formRef.current,
-      'your_user_id'         // replace with your EmailJS user ID (public key)
+      'E9X8qzxFaFSSajbR8'         // replace with your EmailJS user ID (public key)
     )
       .then(() => {
-        setSent(true);
+        toast.success('✅ Message sent successfully!', {
+          icon: '✉️',
+        });
+
         formRef.current.reset();
-        setTimeout(() => setSent(false), 4000);
+
       })
       .catch((err) => {
         console.error(err.text);
+        toast.error('❌ Failed to send. Try again.');
       });
+
   };
 
   return (
     <section
       id="contact"
-      className="relative z-10 px-6 sm:px-10 py-16 bg-gradient-to-br from-[#141e30] via-[#243b55] to-[#141e30] text-white font-space-grotesk"
+      className="relative z-10 px-6 sm:px-10 py-16 bg-black text-white font-space-grotesk overflow-hidden"
     >
+      {/* Glowing Background Dots */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="w-full h-full bg-[radial-gradient(circle_at_10%_10%,rgba(255,0,255,0.1)_0%,transparent_40%),radial-gradient(circle_at_80%_50%,rgba(0,255,255,0.1)_0%,transparent_40%)] animate-pulse" />
+      </div>
+
+      {/* Single Subtle Interactive Blob */}
+      <motion.div
+        className="absolute w-[32rem] h-[32rem] bg-gradient-to-br from-[#1e1e1e] via-[#2a2a2a] to-[#121212] rounded-full opacity-20 blur-[100px] mix-blend-lighten pointer-events-none"
+        style={{ top: '10%', left: '25%' }}
+        animate={{ x: [0, 30, -20, 0], y: [0, 40, -30, 0] }}
+        transition={{ repeat: Infinity, duration: 18, ease: "easeInOut" }}
+        whileHover={{
+          scale: 1.1,
+          opacity: 0.3,
+          transition: { duration: 0.8, ease: "easeInOut" }
+        }}
+      />
       <div className="max-w-4xl mx-auto text-center mb-16">
         <motion.h2
           initial={{ opacity: 0, y: 40 }}
@@ -51,7 +74,7 @@ const Contact = () => {
         initial={{ opacity: 0, scale: 0.95 }}
         whileInView={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6 }}
-        className="max-w-2xl mx-auto bg-white/5 backdrop-blur-lg border border-white/10 p-8 rounded-2xl shadow-xl space-y-6"
+        className="max-w-3xl mx-auto bg-white/5 backdrop-blur-lg border border-white/10 p-8 rounded-2xl shadow-xl space-y-6"
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div>
@@ -60,7 +83,7 @@ const Contact = () => {
               type="text"
               name="user_name"
               required
-              className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-purple-500 text-white"
+              className="w-full px-4 py-3 rounded-lg  bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-purple-500 text-white"
             />
           </div>
           <div>

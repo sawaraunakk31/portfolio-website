@@ -23,6 +23,7 @@ html {
 body {
   @apply bg-black text-white antialiased font-orbitron;
   background-color: #000;
+  cursor: none;
 }
 
 /* ===== Loader Animations ===== */
@@ -60,6 +61,37 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+/* toast animations */
+@keyframes toastIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes toastOut {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+}
+
+[data-sonner-toaster] .enter {
+  animation: toastIn 0.4s ease forwards;
+}
+
+[data-sonner-toaster] .exit {
+  animation: toastOut 0.3s ease forwards;
+}
+
 @keyframes fadeInUp {
   0% {
     opacity: 0;
@@ -217,4 +249,20 @@ body {
 /* Sound Toggle Button */
 .sound-toggle {
   @apply absolute top-4 right-4 text-xs text-green-300 bg-green-900/20 px-2 py-1 rounded border border-green-600 hover:bg-green-800/40 cursor-pointer transition-all;
+}
+.custom-cursor {
+  transform: translate(-50%, -50%);
+  transition: transform 0.15s ease-out, width 0.15s, height 0.15s, background-color 0.15s, border 0.15s;
+  will-change: transform;
+}
+
+.custom-cursor.hovered {
+  width: 50px;
+  height: 50px;
+  background-color: rgba(0, 255, 255, 0.2);
+  border-color: cyan;
+}
+
+.custom-cursor.clicked {
+  transform: translate(-50%, -50%) scale(0.7);
 }

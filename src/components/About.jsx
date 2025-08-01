@@ -30,9 +30,23 @@ const About = () => {
       id="about"
       className="relative min-h-screen bg-black text-white flex items-center justify-center px-4 sm:px-10 overflow-hidden snap-start"
     >
-      {/* Blobs */}
-      <div className="absolute -top-24 -left-24 w-[300px] h-[300px] bg-cyan-500 opacity-20 rounded-full blur-2xl animate-blob z-0 pointer-events-none"></div>
-      <div className="absolute -bottom-24 -right-24 w-[300px] h-[300px] bg-purple-600 opacity-20 rounded-full blur-2xl animate-blob animation-delay-2000 z-0 pointer-events-none"></div>
+      {/* Glowing Background Dots */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="w-full h-full bg-[radial-gradient(circle_at_10%_10%,rgba(255,0,255,0.1)_0%,transparent_40%),radial-gradient(circle_at_80%_50%,rgba(0,255,255,0.1)_0%,transparent_40%)] animate-pulse" />
+      </div>
+
+      {/* Single Subtle Interactive Blob */}
+      <motion.div
+        className="absolute w-[32rem] h-[32rem] bg-gradient-to-br from-[#1e1e1e] via-[#2a2a2a] to-[#121212] rounded-full opacity-20 blur-[100px] mix-blend-lighten pointer-events-none"
+        style={{ top: '10%', left: '25%' }}
+        animate={{ x: [0, 30, -20, 0], y: [0, 40, -30, 0] }}
+        transition={{ repeat: Infinity, duration: 18, ease: "easeInOut" }}
+        whileHover={{
+          scale: 1.1,
+          opacity: 0.3,
+          transition: { duration: 0.8, ease: "easeInOut" }
+        }}
+      />
 
       <motion.div
         initial="hidden"
