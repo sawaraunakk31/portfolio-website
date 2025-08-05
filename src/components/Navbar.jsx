@@ -53,7 +53,7 @@ const Navbar = () => {
           initial={{ x: '100%' }}
           animate={{ x: navOpen ? 0 : '100%' }}
           transition={{ type: 'spring', stiffness: 60 }}
-          className="fixed top-4 right-4 w-[85vw] h-[80vh] rounded-2xl z-40 bg-black/60 backdrop-blur-md shadow-xl p-6 flex flex-col justify-center items-center space-y-6 md:hidden"
+          className="fixed top-4 right-4 w-[85vw] h-[80vh] rounded-2xl z-40 bg-black/70 backdrop-blur-md shadow-xl p-6 flex flex-col justify-center items-center space-y-6 md:hidden"
         >
           {navLinks.map(({ name, id }) =>
             <a

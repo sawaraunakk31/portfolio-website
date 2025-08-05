@@ -82,7 +82,7 @@ const About = () => {
           <ul className="text-[15px] sm:text-base text-gray-300 mt-4 flex flex-col gap-2 sm:gap-2.5 px-2 sm:px-0">
             {[
               <>
-                🚀 <span className="text-cyan-400 font-semibold">MERN</span>, <span className="text-purple-400 font-semibold">Tailwind</span>, &{' '}
+                🚀 <span className="text-purple-400 font-semibold">Next.js</span>, <span className="text-cyan-400 font-semibold">MERN</span>, <span className="text-purple-400 font-semibold">Tailwind</span>, &{' '}
                 <span className="text-cyan-400 font-semibold">Framer Motion</span> for full-stack magic
               </>,
               <>
