@@ -9,6 +9,7 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 import { Toaster } from 'react-hot-toast';
 import CustomCursor from './components/CustomCursor';
+import { Analytics } from "@vercel/analytics/react"
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -74,6 +75,7 @@ const App = () => {
           </div>
         </div>
       )}
+      <Analytics />
     </>
   );
 };
