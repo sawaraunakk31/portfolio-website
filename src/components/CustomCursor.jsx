@@ -1,69 +1,140 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from "react";
+
+const interactiveSelector = "a, button, input, textarea, select, [data-cursor='interactive']";
+const textFieldSelector = "input, textarea, [contenteditable='true']";
 
 const CustomCursor = () => {
-  const cursorRef = useRef(null);
-  const [isMobile, setIsMobile] = useState(false);
+  const dotRef = useRef(null);
+  const ringRef = useRef(null);
+  const frameRef = useRef(null);
+  const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
-    // Detect touch devices
-    const checkIfMobile = () => {
-      setIsMobile(
-        'ontouchstart' in window ||
-        navigator.maxTouchPoints > 0 ||
-        navigator.userAgent.toLowerCase().includes('mobi')
-      );
-    };
+    const mediaQuery = window.matchMedia("(pointer: fine)");
+    const setCursorMode = () => setEnabled(mediaQuery.matches);
 
-    checkIfMobile();
-    window.addEventListener('resize', checkIfMobile);
+    setCursorMode();
+    mediaQuery.addEventListener("change", setCursorMode);
 
-    return () => {
-      window.removeEventListener('resize', checkIfMobile);
-    };
+    return () => mediaQuery.removeEventListener("change", setCursorMode);
   }, []);
 
   useEffect(() => {
-    if (isMobile) return;
+    if (!enabled || !dotRef.current || !ringRef.current) {
+      return;
+    }
 
-    const cursor = cursorRef.current;
+    const dot = dotRef.current;
+    const ring = ringRef.current;
 
-    const moveCursor = (e) => {
-      cursor.style.left = `${e.clientX}px`;
-      cursor.style.top = `${e.clientY}px`;
+    let targetX = window.innerWidth / 2;
+    let targetY = window.innerHeight / 2;
+    let ringX = targetX;
+    let ringY = targetY;
+
+    const updateCursorPosition = (event) => {
+      targetX = event.clientX;
+      targetY = event.clientY;
+      dot.style.left = `${targetX}px`;
+      dot.style.top = `${targetY}px`;
     };
 
-    const addHoverEffect = () => cursor.classList.add('hovered');
-    const removeHoverEffect = () => cursor.classList.remove('hovered');
-    const addClickEffect = () => {
-      cursor.classList.add('clicked');
-      setTimeout(() => cursor.classList.remove('clicked'), 150);
+    const animateCursor = () => {
+      ringX += (targetX - ringX) * 0.17;
+      ringY += (targetY - ringY) * 0.17;
+      ring.style.left = `${ringX}px`;
+      ring.style.top = `${ringY}px`;
+
+      frameRef.current = requestAnimationFrame(animateCursor);
     };
 
-    document.addEventListener('mousemove', moveCursor);
-    document.querySelectorAll('button, a, .cursor-hover').forEach((el) => {
-      el.addEventListener('mouseenter', addHoverEffect);
-      el.addEventListener('mouseleave', removeHoverEffect);
-      el.addEventListener('mousedown', addClickEffect);
-    });
+    const handleMouseDown = () => {
+      ring.classList.add("cursor-ring-simple-pressed");
+    };
+
+    const handleMouseUp = () => {
+      ring.classList.remove("cursor-ring-simple-pressed");
+    };
+
+    const handlePointerOver = (event) => {
+      const textField = event.target.closest(textFieldSelector);
+      if (textField) {
+        ring.classList.add("cursor-ring-simple-hidden");
+        dot.classList.add("cursor-dot-simple-hidden");
+        return;
+      }
+
+      const target = event.target.closest(interactiveSelector);
+      if (target) {
+        ring.classList.add("cursor-ring-simple-active");
+        dot.classList.add("cursor-dot-simple-active");
+      } else {
+        ring.classList.remove("cursor-ring-simple-hidden");
+        dot.classList.remove("cursor-dot-simple-hidden");
+      }
+    };
+
+    const handlePointerOut = (event) => {
+      const leavingTextField = event.target.closest(textFieldSelector);
+      const enteringTextField = event.relatedTarget?.closest(textFieldSelector);
+
+      if (leavingTextField && !enteringTextField) {
+        ring.classList.remove("cursor-ring-simple-hidden");
+        dot.classList.remove("cursor-dot-simple-hidden");
+      }
+
+      const leavingInteractive = event.target.closest(interactiveSelector);
+      const enteringInteractive = event.relatedTarget?.closest(interactiveSelector);
+
+      if (leavingInteractive && !enteringInteractive) {
+        ring.classList.remove("cursor-ring-simple-active");
+        dot.classList.remove("cursor-dot-simple-active");
+      }
+    };
+
+    const handleMouseLeaveViewport = () => {
+      ring.classList.add("cursor-ring-simple-hidden");
+      dot.classList.add("cursor-dot-simple-hidden");
+    };
+
+    const handleMouseEnterViewport = () => {
+      ring.classList.remove("cursor-ring-simple-hidden");
+      dot.classList.remove("cursor-dot-simple-hidden");
+    };
+
+    window.addEventListener("mousemove", updateCursorPosition);
+    window.addEventListener("mousedown", handleMouseDown);
+    window.addEventListener("mouseup", handleMouseUp);
+    window.addEventListener("mouseleave", handleMouseLeaveViewport);
+    window.addEventListener("mouseenter", handleMouseEnterViewport);
+    document.addEventListener("mouseover", handlePointerOver);
+    document.addEventListener("mouseout", handlePointerOut);
+    frameRef.current = requestAnimationFrame(animateCursor);
 
     return () => {
-      document.removeEventListener('mousemove', moveCursor);
-      document.querySelectorAll('button, a, .cursor-hover').forEach((el) => {
-        el.removeEventListener('mouseenter', addHoverEffect);
-        el.removeEventListener('mouseleave', removeHoverEffect);
-        el.removeEventListener('mousedown', addClickEffect);
-      });
-    };
-  }, [isMobile]);
+      window.removeEventListener("mousemove", updateCursorPosition);
+      window.removeEventListener("mousedown", handleMouseDown);
+      window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("mouseleave", handleMouseLeaveViewport);
+      window.removeEventListener("mouseenter", handleMouseEnterViewport);
+      document.removeEventListener("mouseover", handlePointerOver);
+      document.removeEventListener("mouseout", handlePointerOut);
 
-  // Do not render on mobile
-  if (isMobile) return null;
+      if (frameRef.current) {
+        cancelAnimationFrame(frameRef.current);
+      }
+    };
+  }, [enabled]);
+
+  if (!enabled) {
+    return null;
+  }
 
   return (
-    <div
-      ref={cursorRef}
-      className="custom-cursor pointer-events-none fixed z-[9999] w-5 h-5 rounded-full border-2 border-cyan-400 bg-cyan-400/10 transition-all duration-150 ease-out mix-blend-difference"
-    ></div>
+    <>
+      <div ref={ringRef} className="cursor-ring-simple" />
+      <div ref={dotRef} className="cursor-dot-simple" />
+    </>
   );
 };
 

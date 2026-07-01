@@ -1,88 +1,60 @@
-import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import { FaGithub, FaLinkedin, FaTwitter, FaEnvelope, FaArrowUp, FaInstagram } from 'react-icons/fa';
+import React from "react";
+import { motion } from "framer-motion";
+import { FaArrowUp, FaEnvelope, FaGithub, FaInstagram, FaLinkedin } from "react-icons/fa";
+
+const socialLinks = [
+  { icon: <FaGithub />, href: "https://github.com/sawaraunakk31", label: "GitHub" },
+  { icon: <FaLinkedin />, href: "https://www.linkedin.com/in/raunak-sawa", label: "LinkedIn" },
+  { icon: <FaInstagram />, href: "https://instagram.com/raunak.sawa", label: "Instagram" },
+  { icon: <FaEnvelope />, href: "mailto:sawaraunak31@gmail.com", label: "Email" },
+];
 
 const Footer = () => {
-  const [showScrollTop, setShowScrollTop] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setShowScrollTop(window.scrollY > 200);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
-    <footer className="backdrop-blur-md bg-black/50 shadow-md text-gray-400 px-6 py-8 border-t border-white/10 font-space-grotesk sticky bottom-0 z-50">
-      <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-center md:text-left text-sm sm:text-base"
-        >
-          © {new Date().getFullYear()}{' '}
-          <span className="text-white font-semibold">Raunak Sawa</span>. All Rights Reserved.
-        </motion.div>
+    <footer className="relative z-20 border-t border-white/10 bg-zinc-950/75 backdrop-blur-xl">
+      <div className="section-container py-8">
+        <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-sm text-zinc-300"
+          >
+            <p className="font-display text-lg font-semibold text-white">Raunak Sawa</p>
+            <p className="mt-1 text-xs uppercase tracking-[0.16em] text-zinc-400">
+              Copyright {new Date().getFullYear()} All rights reserved
+            </p>
+          </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="flex gap-6 text-lg"
-        >
-          <a
-            href="https://github.com/sawaraunakk31"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-white transition duration-300"
-          >
-            <FaGithub />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/raunak-sawa"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-white transition duration-300"
-          >
-            <FaLinkedin />
-          </a>
-          <a
-            href="https://instagram.com/raunak.sawa"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-white transition duration-300"
-          >
-            <FaInstagram />
-          </a>
-          <a
-            href="mailto:sawaraunak31@email.com"
-            className="hover:text-white transition duration-300"
-          >
-            <FaEnvelope />
-          </a>
-        </motion.div>
+          <div className="flex items-center gap-3">
+            {socialLinks.map((social) => (
+              <a
+                key={social.label}
+                href={social.href}
+                target={social.href.startsWith("http") ? "_blank" : undefined}
+                rel={social.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                aria-label={social.label}
+                className="interactive-pill inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/[0.04] text-zinc-100 transition hover:border-amber-200/60 hover:text-amber-100"
+              >
+                {social.icon}
+              </a>
+            ))}
+
+            <button
+              type="button"
+              onClick={scrollToTop}
+              className="interactive-pill inline-flex h-10 w-10 items-center justify-center rounded-full border border-amber-200/45 bg-amber-200/10 text-amber-100 transition hover:bg-amber-200/20"
+              aria-label="Scroll to top"
+            >
+              <FaArrowUp />
+            </button>
+          </div>
+        </div>
       </div>
-
-      {/* Scroll to Top Button */}
-      {showScrollTop && (
-        <motion.button
-          onClick={scrollToTop}
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 40 }}
-          transition={{ duration: 0.4 }}
-          className="fixed bottom-8 right-8 bg-cyan-600 hover:bg-cyan-700 text-white p-3 rounded-full shadow-lg z-50"
-          aria-label="Scroll to top"
-        >
-          <FaArrowUp />
-        </motion.button>
-      )}
     </footer>
   );
 };

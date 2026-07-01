@@ -1,136 +1,129 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useMemo, useState } from "react";
+import { motion } from "framer-motion";
 
-const fakeLogs = [
-  '[SYS] Booting...',
-  '[CORE] Modules loading...',
-  '[NET] Securing link...',
-  '[AI] Memory sync...',
-  '[DONE] System online.',
+const checkpoints = [
+  { label: "Visual", threshold: 22 },
+  { label: "Content", threshold: 48 },
+  { label: "Motion", threshold: 76 },
+  { label: "Launch", threshold: 100 },
 ];
 
-const generateMatrixColumn = () => {
-  const chars = '01';
-  const length = Math.floor(Math.random() * 25) + 10;
-  return Array.from({ length }, () => chars.charAt(Math.floor(Math.random() * chars.length)));
-};
-
 const Loader = ({ onFinish }) => {
-  const [soundEnabled, setSoundEnabled] = useState(true);
-  const audioRef = useRef(null);
-  const [typedLogs, setTypedLogs] = useState([]);
-  const [currentLineIndex, setCurrentLineIndex] = useState(0);
-  const [currentCharIndex, setCurrentCharIndex] = useState(0);
   const [progress, setProgress] = useState(0);
-  const [matrixColumns, setMatrixColumns] = useState([]);
+  const [isExiting, setIsExiting] = useState(false);
 
   useEffect(() => {
-    const columns = Array.from({ length: 80 }, () => generateMatrixColumn());
-    setMatrixColumns(columns);
+    let frameId;
+    const startedAt = performance.now();
+    const duration = 2100;
+
+    const animateProgress = (now) => {
+      const elapsed = now - startedAt;
+      const raw = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - raw, 3);
+      const next = Math.min(eased * 100, 100);
+      setProgress(next);
+
+      if (next < 100) {
+        frameId = requestAnimationFrame(animateProgress);
+      }
+    };
+
+    frameId = requestAnimationFrame(animateProgress);
+
+    return () => {
+      cancelAnimationFrame(frameId);
+    };
   }, []);
 
   useEffect(() => {
-    if (audioRef.current && soundEnabled) {
-      audioRef.current.volume = 0.2;
-      audioRef.current.play().catch(() => {});
+    if (progress < 100) {
+      return undefined;
     }
-  }, [soundEnabled]);
 
-  useEffect(() => {
-    if (currentLineIndex < fakeLogs.length) {
-      const currentLine = fakeLogs[currentLineIndex];
-      if (currentCharIndex <= currentLine.length) {
-        const timeout = setTimeout(() => {
-          setTypedLogs((prevLogs) => {
-            const updated = [...prevLogs];
-            updated[currentLineIndex] = currentLine.slice(0, currentCharIndex);
-            return updated;
-          });
-          setCurrentCharIndex((prev) => prev + 1);
-          setProgress(
-            Math.floor(
-              ((currentLineIndex + currentCharIndex / currentLine.length) / fakeLogs.length) * 100
-            )
-          );
-        }, 60);
-        return () => clearTimeout(timeout);
-      } else {
-        setCurrentLineIndex((prev) => prev + 1);
-        setCurrentCharIndex(0);
-      }
-    } else {
-      setTimeout(() => {
-        if (audioRef.current) audioRef.current.pause();
-        onFinish?.();
-      }, 500);
-    }
-  }, [currentCharIndex, currentLineIndex]);
+    setIsExiting(true);
+    const timeoutId = setTimeout(() => onFinish?.(), 400);
+    return () => clearTimeout(timeoutId);
+  }, [onFinish, progress]);
 
-  const toggleSound = () => {
-    setSoundEnabled(!soundEnabled);
-    if (audioRef.current) {
-      if (!soundEnabled) {
-        audioRef.current.play().catch(() => {});
-      } else {
-        audioRef.current.pause();
-      }
-    }
-  };
+  const activeCheckpointIndex = useMemo(() => {
+    const nextIndex = checkpoints.findIndex((point) => progress < point.threshold);
+    return nextIndex === -1 ? checkpoints.length - 1 : nextIndex;
+  }, [progress]);
+
+  const activeLabel = checkpoints[activeCheckpointIndex]?.label ?? checkpoints[checkpoints.length - 1].label;
+  const orbLeft = Math.min(progress, 99);
 
   return (
-    <div className="w-full h-screen bg-black flex flex-col items-center justify-center relative overflow-hidden font-orbitron text-green-400">
-      {/* Matrix Rain Top-to-Bottom & Bottom-to-Top */}
-      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden flex justify-between gap-1 px-[2px]">
-        {matrixColumns.map((column, i) => (
-          <div key={i} className="flex flex-col items-center w-[1.25%] text-s font-mono">
-            <div
-              className="animate-matrixFallDown"
-              style={{ animationDelay: `${i * 20}ms`, color: 'rgba(0,255,0,0.3)' }}
-            >
-              {column.map((char, idx) => (
-                <div key={idx}>{char}</div>
-              ))}
-            </div>
-            <div
-              className="animate-matrixFallUp mt-4"
-              style={{ animationDelay: `${i * 40}ms`, color: 'rgba(0,255,0,0.2)' }}
-            >
-              {column.map((char, idx) => (
-                <div key={idx}>{char}</div>
-              ))}
-            </div>
+    <div
+      className={`fixed inset-0 z-[220] flex items-center justify-center bg-[#050505] transition-opacity duration-500 ${
+        isExiting ? "opacity-0" : "opacity-100"
+      }`}
+    >
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(243,212,134,0.15),transparent_42%),linear-gradient(180deg,#0d0d0d_0%,#050505_100%)]" />
+      <motion.div
+        className="absolute inset-0 opacity-[0.06] [background-image:linear-gradient(120deg,rgba(255,255,255,0.4)_0,transparent_28%,transparent_72%,rgba(243,212,134,0.35)_100%)] [background-size:180%_180%]"
+        animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
+        transition={{ duration: 8.4, repeat: Infinity, ease: "easeInOut" }}
+      />
+
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+        className="relative z-10 w-[min(92vw,720px)] px-4"
+      >
+        <div className="flex items-end justify-between">
+          <p className="text-[11px] uppercase tracking-[0.32em] text-amber-100">Raunak Sawa</p>
+          <p className="font-mono text-sm text-zinc-100">{Math.round(progress)}%</p>
+        </div>
+
+        <h2 className="mt-6 text-3xl font-semibold text-white sm:text-5xl">Loading portfolio experience</h2>
+        <p className="mt-2 text-sm uppercase tracking-[0.2em] text-zinc-300">{activeLabel} system in progress</p>
+
+        <div className="mt-10">
+          <div className="relative h-[2px] rounded-full bg-white/20">
+            <motion.div
+              className="h-full bg-gradient-to-r from-amber-300 via-yellow-100 to-white"
+              style={{ width: `${progress}%` }}
+            />
+            <motion.span
+              className="absolute top-1/2 h-4 w-4 -translate-y-1/2 rounded-full border border-white/65 bg-amber-100 shadow-[0_0_16px_rgba(243,212,134,0.8)]"
+              style={{ left: `${orbLeft}%` }}
+              animate={{ scale: [1, 1.15, 1] }}
+              transition={{ duration: 1.15, repeat: Infinity, ease: "easeInOut" }}
+            />
           </div>
-        ))}
-      </div>
 
-      {/* Terminal Typing Logs */}
-      <div className="z-10 text-left w-[90%] max-w-xl p-4 bg-[#0d0d0d]/60 border border-green-400 rounded-md shadow-md backdrop-blur-md font-mono text-sm">
-        {typedLogs.map((line, i) => (
-          <div key={i} className="text-green-400">
-            {line}
-            {i === currentLineIndex && <span className="typing-cursor">▌</span>}
+          <div className="mt-5 grid grid-cols-4 gap-3">
+            {checkpoints.map((point, index) => {
+              const done = progress >= point.threshold;
+              const active = !done && index === activeCheckpointIndex;
+
+              return (
+                <div key={point.label} className="flex flex-col items-center gap-2">
+                  <span
+                    className={`h-2.5 w-2.5 rounded-full ${
+                      done
+                        ? "bg-amber-100 shadow-[0_0_10px_rgba(243,212,134,0.9)]"
+                        : active
+                        ? "bg-white"
+                        : "bg-white/20"
+                    }`}
+                  />
+                  <span
+                    className={`text-[10px] uppercase tracking-[0.12em] ${
+                      done || active ? "text-zinc-100" : "text-zinc-500"
+                    }`}
+                  >
+                    {point.label}
+                  </span>
+                </div>
+              );
+            })}
           </div>
-        ))}
-      </div>
-
-      {/* Progress Bar */}
-      <div className="z-10 mt-8 w-[80%] max-w-lg h-2 bg-gray-800 rounded overflow-hidden">
-        <div
-          className="h-full bg-green-400 glow-bar transition-all duration-200"
-          style={{ width: `${progress}%` }}
-        />
-      </div>
-
-      {/* Sound Toggle */}
-      <div className="absolute top-4 right-4 z-20">
-        <button
-          onClick={toggleSound}
-          className="text-xs border border-green-400 text-green-400 px-3 py-1 rounded hover:bg-green-600/10 transition"
-        >
-          {soundEnabled ? '🔊 Sound On' : '🔇 Sound Off'}
-        </button>
-      </div>
-
-      <audio ref={audioRef} src="/typing.mp3" loop />
+        </div>
+      </motion.div>
     </div>
   );
 };
