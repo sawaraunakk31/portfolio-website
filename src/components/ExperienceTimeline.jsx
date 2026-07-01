@@ -26,7 +26,7 @@ const timelineItems = [
   {
     role: "Software Engineer Intern",
     org: "Bluestock Fintech",
-    period: "2026 - Present",
+    period: "Sep 2025 - Nov 2025",
     icon: <FaBuilding />,
     highlights: [
       "Building fintech product modules and workflow-centric internal tools.",

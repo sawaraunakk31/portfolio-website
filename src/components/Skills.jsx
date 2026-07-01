@@ -163,8 +163,8 @@ const Skills = () => {
         ))}
       </div>
 
-      <div className="glass-panel mt-7 overflow-hidden px-0 py-4">
-        <div className="marquee-track flex w-[200%] gap-3 whitespace-nowrap">
+      <div className="glass-panel relative mt-7 overflow-hidden px-0 py-4">
+        <div className="marquee-track pointer-events-none absolute left-0 top-1/2 flex w-[200%] -translate-y-1/2 gap-3 whitespace-nowrap">
           {[...tickerTools, ...tickerTools].map((tool, idx) => (
             <span
               key={`${tool}-${idx}`}
@@ -174,6 +174,8 @@ const Skills = () => {
             </span>
           ))}
         </div>
+
+        <div className="h-8" aria-hidden="true" />
       </div>
     </div>
   );

@@ -80,17 +80,18 @@ const Projects = () => {
             whileHover={{ y: -4 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.65, delay: index * 0.08 }}
+            className="min-w-0"
           >
             <Tilt
               glareEnable
               glareMaxOpacity={0.2}
               glareBorderRadius="28px"
               perspective={1100}
-              scale={1.02}
+              scale={1}
               transitionSpeed={1800}
               className="h-full overflow-hidden rounded-[1.75rem]"
             >
-              <article className="glass-panel interactive-lift group h-full overflow-hidden p-5 sm:p-6">
+              <article className="glass-panel interactive-lift group h-full w-full min-w-0 overflow-hidden p-5 sm:p-6">
                 <div className="relative overflow-hidden rounded-2xl border border-white/10">
                   <img
                     src={project.image}

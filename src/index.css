@@ -14,6 +14,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -33,6 +34,17 @@ body {
 @media (pointer: coarse) {
   body {
     cursor: auto;
+  }
+}
+
+@media (max-width: 360px) {
+  body {
+    cursor: auto;
+  }
+
+  .cursor-ring-simple,
+  .cursor-dot-simple {
+    display: none;
   }
 }
 
