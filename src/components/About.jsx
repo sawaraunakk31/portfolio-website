@@ -24,7 +24,7 @@ const focusBlocks = [
   },
 ];
 
-const quickFacts = ["VIT Vellore", "Data Science", "Product Engineering", "Fintech + Healthcare"];
+const quickFacts = ["Problem Solving", "Data Science", "Software Engineering"];
 
 const About = () => {
   return (
