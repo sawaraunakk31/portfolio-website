@@ -221,7 +221,7 @@ const App = () => {
         </main>
 
         {/* Spacer to reserve scroll height for the fixed reveal footer */}
-        <div className="h-[40vh] min-h-[300px] w-full" />
+        <div className="h-[45vh] min-h-[380px] w-full pointer-events-none" />
         <Footer />
       </div>
 

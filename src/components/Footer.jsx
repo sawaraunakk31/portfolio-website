@@ -15,7 +15,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="fixed bottom-0 left-0 right-0 z-[-1] flex h-[45vh] min-h-[380px] flex-col justify-end border-t border-amber-200/20 bg-zinc-950 pb-8 overflow-hidden">
+    <footer className="fixed bottom-0 left-0 right-0 z-0 flex h-[45vh] min-h-[380px] flex-col justify-end border-t border-amber-200/20 bg-zinc-950 pb-8 overflow-hidden">
       
       {/* Massive Repeating Background Typography */}
       <div className="pointer-events-none absolute bottom-[-5%] left-0 w-full flex flex-col items-center select-none overflow-hidden mix-blend-screen">
