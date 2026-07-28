@@ -364,7 +364,7 @@ body {
 .hero-name-char {
   font-family: "Space Grotesk Variable", "Space Grotesk", "Sora Variable", "Sora", sans-serif;
   font-weight: 800;
-  font-size: clamp(3.5rem, 10vw, 9rem);
+  font-size: clamp(3.5rem, 8vw, 7.5rem);
   line-height: 0.92;
   letter-spacing: -0.03em;
   will-change: transform, opacity;

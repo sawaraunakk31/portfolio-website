@@ -26,14 +26,14 @@ const Hero = () => {
     const vw = window.innerWidth;
     const vh = window.innerHeight;
     if (vw >= 1280) {
-      setCanvasSize({ w: 520, h: 620 });
+      setCanvasSize({ w: 460, h: 560 });
     } else if (vw >= 1024) {
-      setCanvasSize({ w: 440, h: 540 });
+      setCanvasSize({ w: 400, h: 480 });
     } else if (vw >= 768) {
-      setCanvasSize({ w: 380, h: 460 });
+      setCanvasSize({ w: 340, h: 400 });
     } else {
       // On mobile, make it wider but shorter
-      setCanvasSize({ w: Math.min(vw - 40, 400), h: Math.min(vh * 0.5, 450) });
+      setCanvasSize({ w: Math.min(vw - 40, 360), h: Math.min(vh * 0.45, 400) });
     }
   }, []);
 

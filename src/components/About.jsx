@@ -24,7 +24,7 @@ const focusBlocks = [
   },
 ];
 
-const quickFacts = ["Problem Solving", "Data Science", "Software Engineering"];
+const quickFacts = ["Problem Solving", "Data Science", "Product Engineering"];
 
 const About = () => {
   return (
@@ -63,7 +63,7 @@ const About = () => {
         >
           {/* Subtle top inner glow for the text panel */}
           <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-200/20 to-transparent" />
-          
+
           <span className="eyebrow">About</span>
           <h2 className="gradient-title text-4xl font-semibold sm:text-5xl font-display">Simple, sharp, and effective</h2>
 
