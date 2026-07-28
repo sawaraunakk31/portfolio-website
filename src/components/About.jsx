@@ -23,9 +23,7 @@ const focusBlocks = [
     text: "High-speed delivery with a product mindset and strong engineering fundamentals.",
   },
 ];
-
-const quickFacts = ["Problem Solving", "Data Science", "Product Engineering"];
-
+const quickFacts = ["Problem Solving", "Data Science", "Software Engineering"];
 const About = () => {
   return (
     <div className="section-container">
