@@ -1,23 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import {
   FaArrowDown,
-  FaAward,
-  FaChartLine,
-  FaEnvelope,
-  FaFilePdf,
   FaGithub,
-  FaInstagram,
   FaLinkedin,
-  FaRocket,
+  FaInstagram,
+  FaEnvelope,
 } from "react-icons/fa";
-
-const roles = [
-  "AI systems and data science",
-  "Full stack product engineering",
-  "Human-centered interface design",
-  "Performance and architecture",
-];
+import { PixelatedCanvas } from "./ui/pixelated-canvas";
+import designerImg from "../assets/Designer.png";
 
 const socialLinks = [
   { icon: <FaGithub />, href: "https://github.com/sawaraunakk31", label: "GitHub" },
@@ -27,156 +18,208 @@ const socialLinks = [
 ];
 
 const Hero = () => {
-  const [roleIndex, setRoleIndex] = useState(0);
-  const [typedRole, setTypedRole] = useState("");
-  const [deleting, setDeleting] = useState(false);
+  const [canvasSize, setCanvasSize] = useState({ w: 480, h: 580 });
+  const heroRef = useRef(null);
+
+  // Responsive canvas sizing
+  const updateCanvasSize = useCallback(() => {
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    if (vw >= 1280) {
+      setCanvasSize({ w: 520, h: 620 });
+    } else if (vw >= 1024) {
+      setCanvasSize({ w: 440, h: 540 });
+    } else if (vw >= 768) {
+      setCanvasSize({ w: 380, h: 460 });
+    } else {
+      // On mobile, make it wider but shorter
+      setCanvasSize({ w: Math.min(vw - 40, 400), h: Math.min(vh * 0.5, 450) });
+    }
+  }, []);
 
   useEffect(() => {
-    const activeRole = roles[roleIndex];
-    const typingDelay = deleting ? 45 : 85;
+    updateCanvasSize();
+    window.addEventListener("resize", updateCanvasSize);
+    return () => window.removeEventListener("resize", updateCanvasSize);
+  }, [updateCanvasSize]);
 
-    const timeout = setTimeout(() => {
-      if (!deleting) {
-        const next = activeRole.slice(0, typedRole.length + 1);
-        setTypedRole(next);
+  const letterVariants = {
+    hidden: { opacity: 0, y: 80, rotateX: -40 },
+    visible: (i) => ({
+      opacity: 1,
+      y: 0,
+      rotateX: 0,
+      transition: {
+        delay: 0.4 + i * 0.06,
+        duration: 0.7,
+        ease: [0.22, 1, 0.36, 1],
+      },
+    }),
+  };
 
-        if (next === activeRole) {
-          setTimeout(() => setDeleting(true), 700);
-        }
-      } else {
-        const next = activeRole.slice(0, typedRole.length - 1);
-        setTypedRole(next);
-
-        if (next.length === 0) {
-          setDeleting(false);
-          setRoleIndex((prev) => (prev + 1) % roles.length);
-        }
-      }
-    }, typingDelay);
-
-    return () => clearTimeout(timeout);
-  }, [deleting, roleIndex, typedRole]);
+  const nameFirst = "RAUNAK";
+  const nameLast = "SAWA.";
 
   return (
-    <div className="section-container min-h-screen pt-28 sm:pt-32">
-      <div className="grid items-center gap-8 xl:grid-cols-[1.1fr_0.9fr] xl:gap-10">
-        <motion.div
-          initial={{ opacity: 0, y: 22 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.75, ease: "easeOut" }}
-        >
-          <span className="eyebrow">Open to high-impact product challenges</span>
-
-          <h1 className="max-w-2xl text-4xl font-semibold leading-[1.05] text-white sm:text-5xl lg:text-6xl">
-            Software built for speed, clarity, and real-world impact.
-          </h1>
-
-          <p className="mt-5 max-w-xl text-base leading-relaxed text-zinc-300 sm:text-lg">
-            I build future-ready products across data science and full stack engineering, focused on
-            real outcomes, smooth interfaces, and resilient systems.
-          </p>
-
-          <div className="mt-5 h-8 font-mono text-sm uppercase tracking-[0.2em] text-amber-100 sm:text-base">
-            {typedRole}
-            <span className="ml-1 inline-block text-yellow-100">|</span>
-          </div>
-
-          <div className="mt-7 flex flex-wrap gap-3">
-            <a href="#projects" className="btn-primary interactive-pill">
-              <FaRocket />
-              View Projects
-            </a>
-
-            <a
-              href="/resume-viewer.html"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-secondary interactive-pill"
-            >
-              <FaFilePdf />
-              Open Latest Resume
-            </a>
-          </div>
-
-          <div className="mt-7 flex flex-wrap items-center gap-3">
-            {socialLinks.map((social) => (
-              <a
-                key={social.label}
-                href={social.href}
-                target={social.href.startsWith("http") ? "_blank" : undefined}
-                rel={social.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                aria-label={social.label}
-                className="animate-pulse-ring interactive-pill inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/[0.04] text-lg text-zinc-100 transition hover:border-amber-200/60 hover:text-amber-100"
-              >
-                {social.icon}
-              </a>
-            ))}
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.85, delay: 0.12 }}
-          className="relative"
-        >
-          <div className="glass-panel interactive-lift relative overflow-hidden p-5 sm:p-7">
-            <div className="absolute -right-10 -top-10 h-36 w-36 rounded-full bg-amber-200/18 blur-3xl" />
-            <div className="absolute -bottom-12 -left-10 h-36 w-36 rounded-full bg-white/10 blur-3xl" />
-
-            <p className="font-mono text-xs uppercase tracking-[0.22em] text-amber-100">Current Focus</p>
-
-            <h3 className="mt-3 text-2xl font-semibold leading-snug text-white sm:text-3xl">
-              Building software that blends analytics, full stack speed, and clean product execution.
-            </h3>
-
-            <div className="mt-6 space-y-3">
-              {[
-                {
-                  icon: <FaChartLine className="mt-1 shrink-0 text-amber-100" />,
-                  text: "Power BI storytelling and benchmark intelligence for enterprise decisions.",
-                },
-                {
-                  icon: <FaRocket className="mt-1 shrink-0 text-amber-100" />,
-                  text: "High-performance web apps with React, Next.js, and API-first architecture.",
-                },
-                {
-                  icon: <FaAward className="mt-1 shrink-0 text-amber-100" />,
-                  text: "Top 1% academic track record and event leadership at VIT Vellore.",
-                },
-              ].map((item) => (
-                <div
-                  key={item.text}
-                  className="interactive-lift flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-3 text-sm text-zinc-200"
-                >
-                  {item.icon}
-                  <span>{item.text}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <motion.div
-            className="absolute -bottom-6 right-2 rounded-2xl border border-amber-200/35 bg-zinc-950/90 px-4 py-3 text-xs uppercase tracking-[0.16em] text-amber-100 shadow-[0_10px_30px_rgba(212,175,55,0.2)] sm:right-5"
-            animate={{ y: [0, -8, 0] }}
-            whileHover={{ scale: 1.04 }}
-            transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
-          >
-            Premium Product Engineering
-          </motion.div>
-        </motion.div>
+    <div ref={heroRef} className="relative min-h-screen overflow-hidden">
+      {/* Ambient glow effects */}
+      <div className="pointer-events-none absolute inset-0 z-0">
+        <div className="absolute -left-32 -top-32 h-[500px] w-[500px] rounded-full bg-amber-500/[0.06] blur-[120px]" />
+        <div className="absolute -bottom-40 -right-40 h-[600px] w-[600px] rounded-full bg-yellow-300/[0.04] blur-[150px]" />
+        <div className="absolute left-1/2 top-1/3 h-[300px] w-[300px] -translate-x-1/2 rounded-full bg-amber-200/[0.03] blur-[100px]" />
       </div>
 
-      <motion.a
-        href="#about"
-        className="interactive-pill mx-auto mt-12 flex w-max items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs uppercase tracking-[0.18em] text-zinc-200"
-        animate={{ y: [0, 6, 0] }}
-        whileHover={{ y: -1 }}
-        transition={{ duration: 2, repeat: Infinity }}
-      >
-        Scroll to explore
-        <FaArrowDown />
-      </motion.a>
+      {/* Main content grid */}
+      <div className="section-container relative z-10 flex min-h-screen flex-col justify-center pb-16 pt-20 lg:pb-20">
+        <div className="grid items-center gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:gap-4 xl:gap-8">
+          {/* LEFT — Text content */}
+          <motion.div
+            initial={{ opacity: 0, x: -40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            className="order-2 lg:order-1"
+          >
+            {/* Tagline */}
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.6 }}
+              className="font-mono text-xs font-semibold uppercase tracking-[0.28em] text-amber-300"
+            >
+              Software Engineer and Full Stack Developer
+            </motion.p>
+
+            {/* Sub tags */}
+            <motion.p
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.35, duration: 0.5 }}
+              className="mt-2 font-mono text-[10px] uppercase tracking-[0.22em] text-zinc-500"
+            >
+              Data Science &nbsp;•&nbsp; Full Stack &nbsp;•&nbsp; Product Engineering
+            </motion.p>
+
+            {/* BIG NAME */}
+            <div className="mt-6">
+              <div className="hero-name-line overflow-hidden">
+                {nameFirst.split("").map((char, i) => (
+                  <motion.span
+                    key={`first-${i}`}
+                    custom={i}
+                    variants={letterVariants}
+                    initial="hidden"
+                    animate="visible"
+                    className="hero-name-char inline-block text-white"
+                    style={{ perspective: "600px" }}
+                  >
+                    {char}
+                  </motion.span>
+                ))}
+              </div>
+              <div className="hero-name-line overflow-hidden">
+                {nameLast.split("").map((char, i) => (
+                  <motion.span
+                    key={`last-${i}`}
+                    custom={i + nameFirst.length}
+                    variants={letterVariants}
+                    initial="hidden"
+                    animate="visible"
+                    className="hero-name-char hero-name-accent inline-block"
+                    style={{ perspective: "600px" }}
+                  >
+                    {char}
+                  </motion.span>
+                ))}
+              </div>
+            </div>
+
+            {/* Status pills */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.1, duration: 0.6 }}
+              className="mt-8 flex flex-wrap gap-x-6 gap-y-2"
+            >
+              <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-400">
+                <span className="inline-block h-2 w-2 rounded-sm bg-amber-400" />
+                Building AI & Full Stack Products
+              </span>
+              <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-400">
+                <span className="inline-block h-2 w-2 rounded-sm bg-amber-400" />
+                Open to High-Impact Challenges
+              </span>
+            </motion.div>
+
+            {/* Social links */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.3, duration: 0.6 }}
+              className="mt-8 flex items-center gap-3"
+            >
+              {socialLinks.map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target={social.href.startsWith("http") ? "_blank" : undefined}
+                  rel={social.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                  aria-label={social.label}
+                  className="hero-social-icon interactive-pill"
+                >
+                  {social.icon}
+                </a>
+              ))}
+            </motion.div>
+          </motion.div>
+
+          {/* RIGHT — Pixelated Canvas */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.92 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.3, duration: 1, ease: [0.22, 1, 0.36, 1] }}
+            className="order-1 flex justify-center lg:order-2 lg:justify-end"
+          >
+            <div className="hero-canvas-wrapper relative">
+              {/* Glow behind canvas */}
+              <div className="absolute -inset-8 z-0 rounded-3xl bg-gradient-to-br from-amber-500/[0.08] via-transparent to-yellow-200/[0.05] blur-2xl" />
+              <PixelatedCanvas
+                src={designerImg}
+                width={canvasSize.w}
+                height={canvasSize.h}
+                cellSize={3}
+                dotScale={0.9}
+                shape="square"
+                backgroundColor="#070707"
+                dropoutStrength={0.35}
+                interactive
+                distortionStrength={3}
+                distortionRadius={80}
+                distortionMode="swirl"
+                followSpeed={0.2}
+                jitterStrength={4}
+                jitterSpeed={4}
+                sampleAverage
+                tintColor="#d4af37"
+                tintStrength={0.12}
+                className="relative z-10 rounded-xl border border-white/[0.06] shadow-[0_20px_80px_rgba(212,175,55,0.08)]"
+              />
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Scroll indicator */}
+        <motion.a
+          href="#about"
+          className="interactive-pill mx-auto mt-8 flex w-max items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs uppercase tracking-[0.18em] text-zinc-400 lg:mt-4"
+          animate={{ y: [0, 6, 0] }}
+          whileHover={{ y: -1 }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          Scroll to explore
+          <FaArrowDown />
+        </motion.a>
+      </div>
+
     </div>
   );
 };

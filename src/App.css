@@ -11,6 +11,10 @@
   opacity: 1;
 }
 
+/* =========================================
+   SECTION STACKING — Scroll-driven overlap
+   ========================================= */
+
 .section-block {
   position: relative;
   scroll-margin-top: 92px;
@@ -26,6 +30,56 @@
   padding-bottom: 5.5rem;
 }
 
+/* Stacking sections — handled by GSAP ScrollTrigger */
+.section-stack {
+  position: relative;
+  background-color: var(--bg-primary);
+  background-image:
+    radial-gradient(rgba(255, 255, 255, 0.08) 0.6px, transparent 0.6px),
+    radial-gradient(circle at 12% 8%, rgba(212, 175, 55, 0.05), transparent 34%),
+    radial-gradient(circle at 86% 20%, rgba(243, 212, 134, 0.04), transparent 32%),
+    linear-gradient(180deg, #0a0a0a 0%, #070707 45%, #050505 100%);
+  background-size: 3px 3px, 100% 100%, 100% 100%, 100% 100%;
+  border-radius: 24px 24px 0 0;
+  box-shadow:
+    0 -12px 40px rgba(0, 0, 0, 0.5),
+    0 -2px 0 rgba(255, 255, 255, 0.04);
+}
+
+/* The hero section doesn't stack — it stays behind everything */
+.section-hero-base {
+  position: relative;
+  z-index: 1;
+}
+
+/* Each stacking section gets incrementing z-index */
+.section-stack:nth-child(2) { z-index: 2; }
+.section-stack:nth-child(3) { z-index: 3; }
+.section-stack:nth-child(4) { z-index: 4; }
+.section-stack:nth-child(5) { z-index: 5; }
+.section-stack:nth-child(6) { z-index: 6; }
+.section-stack:nth-child(7) { z-index: 7; }
+
+/* Subtle top-edge glow for stacking effect */
+.section-stack::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 5%;
+  right: 5%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(212, 175, 55, 0.2) 30%,
+    rgba(243, 212, 134, 0.3) 50%,
+    rgba(212, 175, 55, 0.2) 70%,
+    transparent
+  );
+  z-index: 10;
+  pointer-events: none;
+}
+
 @media (min-width: 768px) {
   .section-block {
     padding: 5.75rem 0;
@@ -33,5 +87,14 @@
 
   .section-contact {
     padding-bottom: 6.75rem;
+  }
+}
+
+/* Disable stacking on very small screens for performance */
+@media (max-width: 640px) {
+  .section-stack {
+    position: relative;
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.4);
   }
 }

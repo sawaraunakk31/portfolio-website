@@ -1,13 +1,17 @@
 import React, { useRef } from "react";
 import { motion, useScroll, useSpring } from "framer-motion";
-import { FaBriefcase, FaBuilding, FaGraduationCap } from "react-icons/fa";
+
+import vitLogo from "../assets/vit-logo.jpeg";
+import ecellLogo from "../assets/ecell-logo.png";
+import bluestockLogo from "../assets/bluestock-logo.webp";
+import microsoftLogo from "../assets/microsoft-logo.png";
 
 const timelineItems = [
   {
     role: "B.Tech, Computer Science and Engineering",
     org: "VIT Vellore",
     period: "Aug 2023 - Present",
-    icon: <FaGraduationCap />,
+    logo: vitLogo,
     highlights: [
       "Focused on systems, product engineering, and practical problem solving.",
       "Built strong foundations in full stack development and analytics.",
@@ -17,7 +21,7 @@ const timelineItems = [
     role: "Senior Technical Executive",
     org: "Entrepreneurship Cell, VIT Vellore",
     period: "Jan 2024 - Mar 2025",
-    icon: <FaBriefcase />,
+    logo: ecellLogo,
     highlights: [
       "Led flagship events with 6000+ student participation.",
       "Managed technical coordination and end-to-end event execution.",
@@ -27,7 +31,7 @@ const timelineItems = [
     role: "Software Engineer Intern",
     org: "Bluestock Fintech",
     period: "Sep 2025 - Nov 2025",
-    icon: <FaBuilding />,
+    logo: bluestockLogo,
     highlights: [
       "Building fintech product modules and workflow-centric internal tools.",
       "Improving frontend-backend integration for production user journeys.",
@@ -37,7 +41,7 @@ const timelineItems = [
     role: "Data Science Intern",
     org: "Microsoft Health & Life Sciences",
     period: "May 2026 - Present",
-    icon: <FaBriefcase />,
+    logo: microsoftLogo,
     highlights: [
       "Built Power BI benchmarking analytics for Dragon Copilot stakeholder reviews.",
       "Automated funnel modeling and replaced repetitive manual spreadsheet analysis.",
@@ -90,16 +94,14 @@ const ExperienceTimeline = () => {
               whileHover={{ y: -6 }}
               viewport={{ once: true, amount: 0.25 }}
               transition={{ duration: 0.55, delay: index * 0.04 }}
-              className={`relative pl-12 md:w-[calc(50%-1.6rem)] md:pl-0 ${
-                index % 2 === 0 ? "md:mr-auto" : "md:ml-auto"
-              }`}
+              className={`relative pl-12 md:w-[calc(50%-1.6rem)] md:pl-0 ${index % 2 === 0 ? "md:mr-auto" : "md:ml-auto"
+                }`}
             >
               <span
-                className={`absolute left-0 top-5 inline-flex h-8 w-8 items-center justify-center rounded-full border border-amber-200/50 bg-zinc-900 text-amber-100 shadow-[0_0_18px_rgba(212,175,55,0.3)] md:top-6 ${
-                  index % 2 === 0 ? "md:left-auto md:right-[-2.65rem]" : "md:left-[-2.65rem] md:right-auto"
-                }`}
+                className={`absolute left-[-0.35rem] top-4 inline-flex h-11 w-11 overflow-hidden items-center justify-center rounded-full border-2 border-amber-200/60 bg-white shadow-[0_0_15px_rgba(212,175,55,0.3)] md:top-5 ${index % 2 === 0 ? "md:left-auto md:right-[-2.85rem]" : "md:left-[-2.85rem] md:right-auto"
+                  }`}
               >
-                {item.icon}
+                <img src={item.logo} alt={item.org} className="h-full w-full object-cover scale-[1.25]" />
               </span>
 
               <div className="glass-panel interactive-lift bg-zinc-950/70 p-5 sm:p-6">

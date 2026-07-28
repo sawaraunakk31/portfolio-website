@@ -1,0 +1,15 @@
+{
+  "short_name": "Raunak",
+  "name": "Raunak Sawa Portfolio",
+  "icons": [
+    {
+      "src": "favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#020617",
+  "background_color": "#020617"
+}

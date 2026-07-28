@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Raunak Sawa | Resume</title>
+    <style>
+      :root {
+        --bg: #070707;
+        --panel: #111111;
+        --border: rgba(255, 255, 255, 0.14);
+        --text: #f8f5ef;
+        --muted: #c5bead;
+        --accent: #d4af37;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: var(--bg);
+        color: var(--text);
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .layout {
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+        background:
+          radial-gradient(circle at 14% 10%, rgba(212, 175, 55, 0.14), transparent 32%),
+          radial-gradient(circle at 86% 16%, rgba(255, 255, 255, 0.08), transparent 34%),
+          linear-gradient(180deg, #0d0d0d 0%, #070707 100%);
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 3;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--border);
+        background: rgba(13, 13, 13, 0.92);
+        backdrop-filter: blur(8px);
+      }
+
+      .title {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        border-radius: 999px;
+        border: 1px solid rgba(212, 175, 55, 0.45);
+        background: rgba(212, 175, 55, 0.12);
+        color: var(--text);
+        padding: 8px 14px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+      }
+
+      .btn:hover {
+        background: rgba(212, 175, 55, 0.2);
+      }
+
+      .viewer-wrap {
+        flex: 1;
+        padding: 12px;
+      }
+
+      #status {
+        margin: 0 0 12px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      #viewer {
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        background: var(--panel);
+        min-height: calc(100vh - 132px);
+        padding: 16px;
+      }
+
+      .page {
+        margin: 0 auto 18px;
+        width: fit-content;
+        border-radius: 10px;
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+        overflow: hidden;
+      }
+
+      .page canvas {
+        display: block;
+        max-width: min(94vw, 980px);
+        height: auto;
+        background: #fff;
+      }
+
+      .fallback {
+        margin: 0;
+        font-size: 13px;
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <main class="layout">
+      <header class="topbar">
+        <p class="title">Raunak Sawa - Resume</p>
+        <div class="actions">
+          <a class="btn" href="/Raunak_Resume_Latest.pdf" target="_blank" rel="noopener noreferrer">Open PDF</a>
+        </div>
+      </header>
+
+      <section class="viewer-wrap">
+        <p id="status">Loading resume preview...</p>
+        <div id="viewer" aria-live="polite"></div>
+        <p class="fallback">
+          If the PDF preview does not appear in your browser, use the Open PDF button above.
+        </p>
+      </section>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+      const statusEl = document.getElementById("status");
+      const viewerEl = document.getElementById("viewer");
+      const sourceUrl = "/Raunak_Resume_Latest.pdf";
+
+      pdfjsLib.GlobalWorkerOptions.workerSrc =
+        "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+      const renderPdf = async () => {
+        try {
+          const pdf = await pdfjsLib.getDocument(sourceUrl).promise;
+          statusEl.textContent = `Loaded ${pdf.numPages} pages`;
+
+          for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber += 1) {
+            const page = await pdf.getPage(pageNumber);
+            const viewport = page.getViewport({ scale: 1.45 });
+
+            const wrapper = document.createElement("div");
+            wrapper.className = "page";
+
+            const canvas = document.createElement("canvas");
+            const context = canvas.getContext("2d", { alpha: false });
+
+            canvas.width = Math.floor(viewport.width);
+            canvas.height = Math.floor(viewport.height);
+
+            wrapper.appendChild(canvas);
+            viewerEl.appendChild(wrapper);
+
+            await page.render({
+              canvasContext: context,
+              viewport,
+            }).promise;
+          }
+        } catch (error) {
+          console.error(error);
+          statusEl.textContent = "Resume preview failed to load in this browser.";
+          statusEl.style.color = "#ffccaa";
+        }
+      };
+
+      renderPdf();
+    </script>
+  </body>
+</html>

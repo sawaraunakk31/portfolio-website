@@ -14,7 +14,7 @@
 
 html {
   scroll-behavior: smooth;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body {
@@ -27,7 +27,7 @@ body {
     radial-gradient(circle at 12% 8%, rgba(212, 175, 55, 0.1), transparent 34%),
     radial-gradient(circle at 86% 20%, rgba(243, 212, 134, 0.07), transparent 32%),
     linear-gradient(180deg, #0a0a0a 0%, #070707 45%, #050505 100%);
-  overflow-x: hidden;
+  overflow-x: clip;
   cursor: none;
 }
 
@@ -136,6 +136,12 @@ body {
   .glass-panel {
     @apply rounded-3xl border border-white/10 bg-white/[0.04] backdrop-blur-xl;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+  }
+
+  .glass-panel:hover {
+    @apply border-amber-200/30 bg-white/[0.06];
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(212, 175, 55, 0.05) inset;
   }
 
   .eyebrow {
@@ -143,30 +149,51 @@ body {
   }
 
   .gradient-title {
-    @apply bg-gradient-to-r from-white via-amber-50 to-amber-300 bg-clip-text font-display tracking-wide text-transparent;
+    @apply bg-gradient-to-r from-white via-amber-50 to-amber-300 bg-clip-text tracking-wide text-transparent;
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full border border-amber-200/55 bg-gradient-to-r from-amber-300 to-yellow-200 px-5 py-3 text-sm font-semibold text-zinc-900 transition hover:brightness-110;
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-amber-200/55 bg-gradient-to-r from-amber-300 to-yellow-200 px-5 py-3 text-sm font-semibold text-zinc-900 transition-all duration-300;
+    box-shadow: 0 4px 20px rgba(212, 175, 55, 0.15);
+  }
+
+  .btn-primary:hover {
+    @apply border-amber-100 brightness-110;
+    box-shadow: 0 8px 30px rgba(212, 175, 55, 0.3), 0 0 20px rgba(255, 255, 255, 0.3) inset;
+    transform: translateY(-2px);
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-zinc-900/45 px-5 py-3 text-sm font-semibold text-zinc-100 transition hover:border-amber-200/55 hover:text-amber-50;
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-white/25 bg-zinc-900/45 px-5 py-3 text-sm font-semibold text-zinc-100 transition-all duration-300;
+  }
+
+  .btn-secondary:hover {
+    @apply border-amber-200/60 text-amber-50 bg-zinc-800/80;
+    box-shadow: 0 8px 30px rgba(212, 175, 55, 0.15);
+    transform: translateY(-2px);
   }
 
   .tag-pill {
-    @apply rounded-full border border-white/20 bg-white/[0.04] px-3 py-1 text-xs font-medium text-zinc-100;
+    @apply rounded-full border border-white/20 bg-white/[0.04] px-3 py-1 text-xs font-medium text-zinc-100 transition-colors duration-300;
+  }
+
+  .tag-pill:hover {
+    @apply border-amber-200/40 bg-amber-200/10 text-amber-50;
   }
 
   .interactive-lift {
     position: relative;
     isolation: isolate;
     transition:
-      transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
-      box-shadow 320ms ease,
-      border-color 240ms ease,
-      background-color 240ms ease;
+      transform 400ms cubic-bezier(0.175, 0.885, 0.32, 1.275),
+      box-shadow 400ms ease,
+      border-color 400ms ease,
+      background-color 400ms ease;
     will-change: transform;
+  }
+
+  .interactive-lift:hover {
+    transform: translateY(-6px) scale(1.02);
   }
 
   .interactive-lift::before {
@@ -211,6 +238,12 @@ body {
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 220ms ease;
+  }
+
+  /* Contact form input focus glow */
+  input:focus,
+  textarea:focus {
+    box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.15), 0 0 20px rgba(212, 175, 55, 0.08);
   }
 }
 
@@ -316,4 +349,73 @@ body {
 .cursor-ring-simple.cursor-ring-simple-hidden,
 .cursor-dot-simple.cursor-dot-simple-hidden {
   opacity: 0;
+}
+
+/* =========================================
+   HERO REDESIGN — Pixelated Canvas Layout
+   ========================================= */
+
+/* Name typography */
+.hero-name-line {
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+}
+
+.hero-name-char {
+  font-family: "Space Grotesk Variable", "Space Grotesk", "Sora Variable", "Sora", sans-serif;
+  font-weight: 800;
+  font-size: clamp(3.5rem, 10vw, 9rem);
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+  will-change: transform, opacity;
+}
+
+.hero-name-accent {
+  background: linear-gradient(135deg, #d4af37 0%, #f3d486 40%, #d4af37 70%, #e8c84a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Social icons in hero */
+.hero-social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  width: 44px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  color: #a1a1aa;
+  font-size: 1rem;
+  transition: all 280ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hero-social-icon:hover {
+  border-color: rgba(212, 175, 55, 0.55);
+  color: #f3d486;
+  background: rgba(212, 175, 55, 0.08);
+  box-shadow: 0 0 24px rgba(212, 175, 55, 0.15);
+  transform: translateY(-3px);
+}
+
+/* Canvas wrapper */
+.hero-canvas-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1023px) {
+  .hero-name-char {
+    font-size: clamp(3rem, 12vw, 6rem);
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-name-char {
+    font-size: clamp(2.4rem, 14vw, 4.5rem);
+  }
 }

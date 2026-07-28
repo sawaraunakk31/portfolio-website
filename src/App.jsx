@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import { AnimatePresence, motion } from "framer-motion";
 import { Analytics } from "@vercel/analytics/react";
 import Lenis from "lenis";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Loader from "./components/Loader";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import About from "./components/About";
 import ExperienceTimeline from "./components/ExperienceTimeline";
-import Skills from "./components/Skills";
+import Skills, { tickerTools } from "./components/Skills";
 import Projects from "./components/Projects";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
@@ -17,9 +19,21 @@ import AuroraBackground from "./components/AuroraBackground";
 import ScrollProgress from "./components/ScrollProgress";
 import "./App.css";
 
+gsap.registerPlugin(ScrollTrigger);
+
+const sectionVariant = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [playLandingReveal, setPlayLandingReveal] = useState(false);
+  const mainRef = useRef(null);
 
   useEffect(() => {
     if (isLoading) {
@@ -45,19 +59,45 @@ const App = () => {
       touchMultiplier: 1.05,
     });
 
-    let rafId = 0;
-
-    const animate = (time) => {
-      lenis.raf(time);
-      rafId = requestAnimationFrame(animate);
-    };
-
-    rafId = requestAnimationFrame(animate);
+    lenis.on("scroll", ScrollTrigger.update);
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1000);
+    });
+    gsap.ticker.lagSmoothing(0);
 
     return () => {
-      cancelAnimationFrame(rafId);
       lenis.destroy();
+      gsap.ticker.remove(lenis.raf);
     };
+  }, [isLoading]);
+
+  useEffect(() => {
+    if (isLoading || !mainRef.current) return;
+
+    const ctx = gsap.context(() => {
+      const stackSections = gsap.utils.toArray(".section-stack");
+
+      stackSections.forEach((section, i) => {
+        const isLast = i === stackSections.length - 1;
+
+        // Pin the current section
+        if (!isLast) {
+          ScrollTrigger.create({
+            trigger: section,
+            // If section is taller than viewport, wait until user reaches its bottom
+            // If it's shorter, pin it as soon as it reaches the top
+            start: () => (section.offsetHeight > window.innerHeight ? "bottom bottom" : "top top"),
+            pin: true,
+            pinSpacing: false, // The next section will overlap it
+          });
+        }
+      });
+
+      // Recalculate triggers in case fonts/images load
+      setTimeout(() => ScrollTrigger.refresh(), 500);
+    }, mainRef);
+
+    return () => ctx.revert();
   }, [isLoading]);
 
   return (
@@ -65,7 +105,6 @@ const App = () => {
       {isLoading && <Loader onFinish={() => setIsLoading(false)} />}
 
       <div className={`app-shell ${isLoading ? "app-shell-hidden" : "app-shell-visible"}`}>
-        <AuroraBackground />
         <CustomCursor />
         <ScrollProgress />
         <Navbar />
@@ -98,74 +137,91 @@ const App = () => {
           }}
         />
 
-        <motion.main
-          className="relative z-10"
-          initial={{ opacity: 0, y: 24, filter: "blur(9px)" }}
-          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <motion.section
+        <main ref={mainRef} className="relative z-10 bg-zinc-950">
+          <section
             id="hero"
-            className="section-block section-hero"
-            initial={{ opacity: 0, y: 28 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.22 }}
-            transition={{ duration: 0.65 }}
+            className="section-block section-hero section-hero-base relative overflow-hidden"
           >
+            <AuroraBackground />
             <Hero />
-          </motion.section>
-          <motion.section
-            id="about"
-            className="section-block"
-            initial={{ opacity: 0, y: 28 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.2 }}
-            transition={{ duration: 0.6 }}
-          >
-            <About />
-          </motion.section>
-          <motion.section
-            id="experience"
-            className="section-block"
-            initial={{ opacity: 0, y: 28 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.2 }}
-            transition={{ duration: 0.6 }}
-          >
-            <ExperienceTimeline />
-          </motion.section>
-          <motion.section
-            id="skills"
-            className="section-block"
-            initial={{ opacity: 0, y: 28 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.2 }}
-            transition={{ duration: 0.6 }}
-          >
-            <Skills />
-          </motion.section>
-          <motion.section
-            id="projects"
-            className="section-block"
-            initial={{ opacity: 0, y: 28 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.2 }}
-            transition={{ duration: 0.6 }}
-          >
-            <Projects />
-          </motion.section>
-          <motion.section
-            id="contact"
-            className="section-block section-contact"
-            initial={{ opacity: 0, y: 28 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.2 }}
-            transition={{ duration: 0.6 }}
-          >
-            <Contact />
-          </motion.section>
-        </motion.main>
+          </section>
 
+          {/* Marquee Ticker between Hero and About */}
+          <div className="relative border-y border-amber-200/20 bg-amber-900/10 py-6 overflow-hidden">
+            <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-zinc-950 to-transparent sm:w-32" />
+            <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-zinc-950 to-transparent sm:w-32" />
+
+            <div className="marquee-track pointer-events-none flex w-[200%] gap-4 whitespace-nowrap px-4">
+              {[...tickerTools, ...tickerTools].map((tool, idx) => (
+                <span
+                  key={`${tool}-${idx}`}
+                  className="tag-pill interactive-pill inline-flex border-amber-200/40 bg-amber-200/10 px-5 py-2.5 text-sm font-semibold tracking-wide text-amber-50"
+                >
+                  {tool}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Stacking sections using native CSS position: sticky */}
+          <section id="about" className="section-block section-stack">
+            <motion.div
+              variants={sectionVariant}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.15 }}
+            >
+              <About />
+            </motion.div>
+          </section>
+
+          <section id="experience" className="section-block section-stack">
+            <motion.div
+              variants={sectionVariant}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.15 }}
+            >
+              <ExperienceTimeline />
+            </motion.div>
+          </section>
+
+          <section id="skills" className="section-block section-stack">
+            <motion.div
+              variants={sectionVariant}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.15 }}
+            >
+              <Skills />
+            </motion.div>
+          </section>
+
+          <section id="projects" className="section-block section-stack">
+            <motion.div
+              variants={sectionVariant}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.15 }}
+            >
+              <Projects />
+            </motion.div>
+          </section>
+
+          <section id="contact" className="section-block section-contact section-stack">
+            <motion.div
+              variants={sectionVariant}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.15 }}
+            >
+              <Contact />
+            </motion.div>
+          </section>
+        </main>
+
+        {/* Spacer to reserve scroll height for the fixed reveal footer */}
+        <div className="h-[40vh] min-h-[300px] w-full" />
         <Footer />
       </div>
 

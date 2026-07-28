@@ -98,23 +98,25 @@ const skillGroups = [
   },
 ];
 
-const tickerTools = [
+export const tickerTools = [
   "Azure Synapse",
   "Microsoft Fabric",
   "Power BI",
   "Power BI Activator",
-  "Data Pipelines",
-  "Power Query",
-  "DAX",
-  "Automation Workflows",
-  "Python",
-  "LangChain",
-  "FAISS",
-  "SQL",
+  "Power Query M",
   "React",
+  "Next.js",
   "Node.js",
+  "Express",
+  "FastAPI",
   "MongoDB",
-  "Docker",
+  "Tailwind CSS",
+  "Framer Motion",
+  "JavaScript",
+  "TypeScript",
+  "Java",
+  "C++",
+  "Python",
 ];
 
 const Skills = () => {
@@ -163,20 +165,6 @@ const Skills = () => {
         ))}
       </div>
 
-      <div className="glass-panel relative mt-7 overflow-hidden px-0 py-4">
-        <div className="marquee-track pointer-events-none absolute left-0 top-1/2 flex w-[200%] -translate-y-1/2 gap-3 whitespace-nowrap">
-          {[...tickerTools, ...tickerTools].map((tool, idx) => (
-            <span
-              key={`${tool}-${idx}`}
-              className="tag-pill interactive-pill inline-flex border-amber-200/30 bg-amber-200/10 text-amber-50"
-            >
-              {tool}
-            </span>
-          ))}
-        </div>
-
-        <div className="h-8" aria-hidden="true" />
-      </div>
     </div>
   );
 };
