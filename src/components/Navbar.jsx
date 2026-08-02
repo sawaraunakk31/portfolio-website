@@ -81,7 +81,7 @@ const Navbar = () => {
 
           <div className="hidden items-center gap-3 md:flex">
             <a
-              href="/resume-viewer.html"
+              href="https://drive.google.com/file/d/14ztUqyALnTvkzdPolLKHAGCiCurn4MPH/view?usp=sharing"
               target="_blank"
               rel="noopener noreferrer"
               className="interactive-pill inline-flex items-center gap-2 rounded-full border border-amber-200/45 bg-amber-200/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.15em] text-amber-100 transition hover:bg-amber-200/20"
@@ -125,7 +125,7 @@ const Navbar = () => {
             </div>
 
             <a
-              href="/resume-viewer.html"
+              href="https://drive.google.com/file/d/14ztUqyALnTvkzdPolLKHAGCiCurn4MPH/view?usp=sharing"
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setIsOpen(false)}

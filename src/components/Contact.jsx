@@ -96,7 +96,7 @@ const Contact = () => {
           ))}
 
           <a
-            href="/resume-viewer.html"
+            href="https://drive.google.com/file/d/14ztUqyALnTvkzdPolLKHAGCiCurn4MPH/view?usp=sharing"
             target="_blank"
             rel="noopener noreferrer"
             className="glass-panel interactive-lift flex items-center justify-between gap-3 border-amber-200/35 bg-amber-200/10 p-4 text-amber-100"

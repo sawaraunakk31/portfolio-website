@@ -96,7 +96,7 @@ const About = () => {
           </div>
 
           <a
-            href="/resume-viewer.html"
+            href="https://drive.google.com/file/d/14ztUqyALnTvkzdPolLKHAGCiCurn4MPH/view?usp=sharing"
             target="_blank"
             rel="noopener noreferrer"
             className="interactive-link mt-10 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.15em] text-amber-100 transition-colors hover:text-white"
